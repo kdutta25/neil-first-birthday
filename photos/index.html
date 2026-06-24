@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      try {
+        const theme = localStorage.getItem("neil-birthday-theme");
+        if (theme === "dark") document.documentElement.dataset.theme = "dark";
+        const lang = localStorage.getItem("neil-birthday-lang");
+        if (lang === "hi" || lang === "pa" || lang === "bn") {
+          document.documentElement.lang = lang;
+        }
+      } catch {}
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neil's First Birthday Photos</title>
+    <meta
+      name="description"
+      content="Thank you for joining Neil's first great adventure. Relive the memories from his first birthday."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Neil's First Birthday Photos" />
+    <meta
+      property="og:description"
+      content="Our greatest adventure. Thank you for celebrating with us."
+    />
+    <meta
+      property="og:url"
+      content="https://neilsfirstbirthday.kaustubhdutta.com/photos"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Gurmukhi:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" crossorigin src="/photos/assets/index-BHWiJglO.js"></script>
+    <link rel="stylesheet" crossorigin href="/photos/assets/index-B6bqr7hn.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
