@@ -1,6 +1,6 @@
 # Neil's First Birthday
 
-React photo gallery for [neilsfirstbirthday.kaustubhdutta.com/photos](https://neilsfirstbirthday.kaustubhdutta.com/photos).
+Photo gallery for [neilsfirstbirthday.kaustubhdutta.com/photos](https://neilsfirstbirthday.kaustubhdutta.com/photos).
 
 ## Quick start
 
