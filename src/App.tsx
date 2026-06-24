@@ -4,6 +4,7 @@ import { SkyDecorations } from "./components/SkyDecorations";
 import { Gallery } from "./components/Gallery";
 import { Hero } from "./components/Hero";
 import { PreferencesBar } from "./components/PreferencesBar";
+import { SiteFooter } from "./components/SiteFooter";
 import { loadPhotos } from "./utils/photos";
 
 const Page = styledWithConfig("div")`
@@ -39,6 +40,7 @@ export default function App() {
         <PreferencesBar />
         <Hero />
         <Gallery photos={photos} />
+        <SiteFooter />
       </Shell>
     </Page>
   );

@@ -26,7 +26,13 @@ export type TranslationKey =
   | "punjabi"
   | "bengali"
   | "switchToLight"
-  | "switchToDark";
+  | "switchToDark"
+  | "footerDesigned"
+  | "footerCopyright"
+  | "footerBuilt"
+  | "footerYoutubeAria"
+  | "footerInstagramAria"
+  | "footerGithubAria";
 
 export type Translations = Record<TranslationKey, string>;
 
@@ -60,6 +66,12 @@ export const translations: Record<Language, Translations> = {
     bengali: "Bengali",
     switchToLight: "Switch to light mode",
     switchToDark: "Switch to dark mode",
+    footerDesigned: "Designed and developed by Kaus",
+    footerCopyright: "Copyright © {{year}} KD",
+    footerBuilt: "Built with React, TypeScript and Vite",
+    footerYoutubeAria: "YouTube — Kaus Diaries",
+    footerInstagramAria: "Instagram — Neil Dutta",
+    footerGithubAria: "GitHub — neil-first-birthday",
   },
   hi: {
     pageTitle: "नील का पहला जन्मदिन — तस्वीरें",
@@ -89,6 +101,12 @@ export const translations: Record<Language, Translations> = {
     bengali: "बंगाली",
     switchToLight: "लाइट मोड पर जाएं",
     switchToDark: "डार्क मोड पर जाएं",
+    footerDesigned: "Kaus द्वारा डिज़ाइन और विकसित",
+    footerCopyright: "कॉपीराइट © {{year}} KD",
+    footerBuilt: "React, TypeScript और Vite से निर्मित",
+    footerYoutubeAria: "YouTube — Kaus Diaries",
+    footerInstagramAria: "Instagram — Neil Dutta",
+    footerGithubAria: "GitHub — neil-first-birthday",
   },
   pa: {
     pageTitle: "ਨੀਲ ਦਾ ਪਹਿਲਾ ਜਨਮਦਿਨ — ਫੋਟੋਆਂ",
@@ -118,6 +136,12 @@ export const translations: Record<Language, Translations> = {
     bengali: "ਬੰਗਾਲੀ",
     switchToLight: "ਲਾਈਟ ਮੋਡ 'ਤੇ ਜਾਓ",
     switchToDark: "ਡਾਰਕ ਮੋਡ 'ਤੇ ਜਾਓ",
+    footerDesigned: "Kaus ਦੁਆਰਾ ਡਿਜ਼ਾਈਨ ਅਤੇ ਵਿਕਸਿਤ",
+    footerCopyright: "ਕਾਪੀਰਾਈਟ © {{year}} KD",
+    footerBuilt: "React, TypeScript ਅਤੇ Vite ਨਾਲ ਬਣਾਇਆ ਗਿਆ",
+    footerYoutubeAria: "YouTube — Kaus Diaries",
+    footerInstagramAria: "Instagram — Neil Dutta",
+    footerGithubAria: "GitHub — neil-first-birthday",
   },
   bn: {
     pageTitle: "নীলের প্রথম জন্মদিনের ফটো",
@@ -147,6 +171,12 @@ export const translations: Record<Language, Translations> = {
     bengali: "বাংলা",
     switchToLight: "লাইট মোডে যান",
     switchToDark: "ডার্ক মোডে যান",
+    footerDesigned: "Kaus দ্বারা ডিজাইন ও তৈরি",
+    footerCopyright: "কপিরাইট © {{year}} KD",
+    footerBuilt: "React, TypeScript এবং Vite দিয়ে তৈরি",
+    footerYoutubeAria: "YouTube — Kaus Diaries",
+    footerInstagramAria: "Instagram — Neil Dutta",
+    footerGithubAria: "GitHub — neil-first-birthday",
   },
 };
 
