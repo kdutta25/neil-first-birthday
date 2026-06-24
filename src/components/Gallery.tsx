@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styledWithConfig from "../utils/styledWithConfig";
 import { useI18n } from "../i18n/I18nContext";
-import { photoUrl } from "../utils/photos";
+import { GALLERY_BATCH_SIZE, photoUrl } from "../utils/photos";
 import { Lightbox } from "./Lightbox";
 
 const Section = styledWithConfig("section")`
@@ -65,6 +65,11 @@ const EmptyState = styledWithConfig("p")`
   background: var(--gallery-empty-bg);
 `;
 
+const LoadMoreSentinel = styledWithConfig("div")`
+  width: 100%;
+  height: 1px;
+`;
+
 type GalleryProps = {
   photos: string[];
 };
@@ -72,6 +77,37 @@ type GalleryProps = {
 export function Gallery({ photos }: GalleryProps) {
   const { t } = useI18n();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [visibleCount, setVisibleCount] = useState(GALLERY_BATCH_SIZE);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setVisibleCount(GALLERY_BATCH_SIZE);
+  }, [photos]);
+
+  useEffect(() => {
+    const hasMore = visibleCount < photos.length;
+    const sentinel = loadMoreRef.current;
+    if (!hasMore || !sentinel) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setVisibleCount((count) =>
+            Math.min(count + GALLERY_BATCH_SIZE, photos.length)
+          );
+        }
+      },
+      { rootMargin: "240px" }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [photos.length, visibleCount]);
+
+  const visiblePhotos = photos.slice(0, visibleCount);
+  const hasMorePhotos = visibleCount < photos.length;
 
   return (
     <Section data-component-id="Gallery" aria-label={t("galleryHeading")}>
@@ -85,24 +121,33 @@ export function Gallery({ photos }: GalleryProps) {
           {t("galleryEmpty")}
         </EmptyState>
       ) : (
-        <Grid data-component-id="GalleryGrid">
-          {photos.map((filename, index) => (
-            <Item
-              key={filename}
-              data-component-id="GalleryItem"
-              type="button"
-              aria-label={t("openPhoto", { n: index + 1 })}
-              onClick={() => setActiveIndex(index)}
-            >
-              <Thumb
-                data-component-id="GalleryThumb"
-                src={photoUrl(filename)}
-                alt={t("photoAlt", { n: index + 1 })}
-                loading="lazy"
-              />
-            </Item>
-          ))}
-        </Grid>
+        <>
+          <Grid data-component-id="GalleryGrid">
+            {visiblePhotos.map((filename, index) => (
+              <Item
+                key={filename}
+                data-component-id="GalleryItem"
+                type="button"
+                aria-label={t("openPhoto", { n: index + 1 })}
+                onClick={() => setActiveIndex(index)}
+              >
+                <Thumb
+                  data-component-id="GalleryThumb"
+                  src={photoUrl(filename)}
+                  alt={t("photoAlt", { n: index + 1 })}
+                  loading="lazy"
+                />
+              </Item>
+            ))}
+          </Grid>
+          {hasMorePhotos ? (
+            <LoadMoreSentinel
+              ref={loadMoreRef}
+              data-component-id="GalleryLoadMore"
+              aria-hidden="true"
+            />
+          ) : null}
+        </>
       )}
 
       {activeIndex !== null ? (
