@@ -4,6 +4,8 @@ Photo gallery for [photos.neilsfirstbirthday.kaustubhdutta.com](https://photos.n
 
 A single-page birthday photo gallery with a vintage “Little Explorer” theme, light/dark mode, multilingual UI, and a responsive grid with lightbox viewer.
 
+![Neil's first adventure — birthday backdrop](album/Image-3.jpg)
+
 ## Tech stack
 
 | Layer | Technology |
