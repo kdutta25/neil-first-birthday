@@ -77,7 +77,7 @@ neil-first-birthday/
 ├── tsconfig.json
 ├── tsconfig.app.json
 ├── tsconfig.node.json
-└── vite.config.ts            # base: /photos/, outDir: dist/photos
+└── vite.config.ts            # base: /gallery/, outDir: dist/gallery
 ```
 
 ## Quick start
@@ -87,7 +87,7 @@ npm install
 npm start
 ```
 
-Open [http://localhost:5173/photos/](http://localhost:5173/photos/).
+Open [http://localhost:5173/gallery/](http://localhost:5173/gallery/).
 
 ## Photos
 
@@ -113,8 +113,8 @@ npm run deploy
 
 Build output:
 
-- `dist/photos/` — the React gallery (served at `/photos/`)
-- `dist/index.html` — redirects `/` → `/photos/`
+- `dist/gallery/` — the React gallery (served at `/gallery/`)
+- `dist/index.html` — redirects `/` → `/gallery/`
 - `dist/CNAME` — `neilsfirstbirthday.kaustubhdutta.com`
 
 In GitHub → Settings → Pages, set source to the `gh-pages` branch.

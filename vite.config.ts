@@ -1,12 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// Served at https://photos.neilsfirstbirthday.kaustubhdutta.com/photos/
+// Served at https://photos.neilsfirstbirthday.kaustubhdutta.com/gallery/
 export default defineConfig({
-  base: "/photos/",
+  base: "/gallery/",
   plugins: [react()],
   build: {
-    outDir: "dist/photos",
+    outDir: "dist/gallery",
     emptyOutDir: true,
   },
 });

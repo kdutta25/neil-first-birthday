@@ -14,11 +14,11 @@ writeFileSync(
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Neil's First Birthday</title>
-  <meta http-equiv="refresh" content="0; url=/photos/" />
-  <script>window.location.replace("/photos/");</script>
+  <meta http-equiv="refresh" content="0; url=/gallery/" />
+  <script>window.location.replace("/gallery/");</script>
 </head>
 <body>
-  <p>Redirecting to <a href="/photos/">Neil's first birthday photos</a>…</p>
+  <p>Redirecting to <a href="/gallery/">Neil's first birthday photos</a>…</p>
 </body>
 </html>`,
   "utf8",
@@ -29,4 +29,4 @@ if (existsSync(cname)) {
   copyFileSync(cname, join(distRoot, "CNAME"));
 }
 
-console.log("Created dist/index.html → /photos/ redirect");
+console.log("Created dist/index.html → /gallery/ redirect");
