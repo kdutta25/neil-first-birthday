@@ -1,8 +1,8 @@
 # Neil's First Birthday
 
-[photos.neilsfirstbirthday.kaustubhdutta.com](https://photos.neilsfirstbirthday.kaustubhdutta.com).
+Photo gallery at [photos.neilsfirstbirthday.kaustubhdutta.com/gallery/](https://photos.neilsfirstbirthday.kaustubhdutta.com/gallery/).
 
-A single-page birthday photo gallery with a vintage “Little Explorer” theme, light/dark mode, multilingual UI, and a responsive grid with lightbox viewer.
+A single-page birthday photo gallery with a vintage “Little Explorer” theme, light/dark mode, multilingual UI, and a responsive grid with lightbox viewer. The app is served under the `/gallery/` path on GitHub Pages (Vite `base: "/gallery/"`).
 
 ![Neil's first adventure — birthday backdrop](album/Image-3.jpg)
 
@@ -46,7 +46,7 @@ neil-first-birthday/
 ├── public/album/             # Generated at build time (gitignored)
 ├── scripts/
 │   ├── sync-album.mjs        # Copies album/ → public/album/ + manifest.json
-│   └── postbuild.mjs         # Writes dist/index.html root redirect + CNAME
+│   └── postbuild.mjs         # Writes dist/index.html → /gallery/ redirect + CNAME
 ├── src/
 │   ├── assets/
 │   │   └── hero.png          # Hero banner image
@@ -71,7 +71,7 @@ neil-first-birthday/
 │   ├── App.tsx               # Page shell
 │   ├── index.css             # Light / dark CSS variables
 │   └── main.tsx              # React entry point
-├── CNAME                     # neilsfirstbirthday.kaustubhdutta.com
+├── CNAME                     # photos.neilsfirstbirthday.kaustubhdutta.com
 ├── index.html
 ├── package.json
 ├── tsconfig.json
@@ -87,7 +87,7 @@ npm install
 npm start
 ```
 
-Open [http://localhost:5173/gallery/](http://localhost:5173/gallery/).
+Open [http://localhost:5173/gallery/](http://localhost:5173/gallery/) (Vite serves the app at the same `/gallery/` path as production).
 
 ## Photos
 
@@ -115,11 +115,16 @@ Build output:
 
 - `dist/gallery/` — the React gallery (served at `/gallery/`)
 - `dist/index.html` — redirects `/` → `/gallery/`
-- `dist/CNAME` — `neilsfirstbirthday.kaustubhdutta.com`
+- `dist/CNAME` — `photos.neilsfirstbirthday.kaustubhdutta.com`
+
+Live URLs:
+
+- **Gallery:** https://photos.neilsfirstbirthday.kaustubhdutta.com/gallery/
+- **Root:** https://photos.neilsfirstbirthday.kaustubhdutta.com/ → redirects to `/gallery/`
 
 In GitHub → Settings → Pages, set source to the `gh-pages` branch.
 
-**Cloudflare:** remove any blanket redirect rule on `neilsfirstbirthday.kaustubhdutta.com` so GitHub Pages can serve the site.
+**Cloudflare:** remove any blanket redirect rule on `photos.neilsfirstbirthday.kaustubhdutta.com` so GitHub Pages can serve the site.
 
 ## Scripts
 
@@ -127,6 +132,6 @@ In GitHub → Settings → Pages, set source to the `gh-pages` branch.
 |---------|-------------|
 | `npm start` | Sync album + dev server |
 | `npm run dev` | Alias for `npm start` |
-| `npm run build` | Sync album + TypeScript check + production build + root redirect |
+| `npm run build` | Sync album + TypeScript check + production build + `/gallery/` redirect |
 | `npm run preview` | Preview the production build locally |
 | `npm run deploy` | Build and push to `gh-pages` |
