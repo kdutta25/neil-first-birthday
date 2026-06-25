@@ -1,6 +1,6 @@
 # Neil's First Birthday
 
-Photo gallery for [photos.neilsfirstbirthday.kaustubhdutta.com](https://photos.neilsfirstbirthday.kaustubhdutta.com).
+[photos.neilsfirstbirthday.kaustubhdutta.com](https://photos.neilsfirstbirthday.kaustubhdutta.com).
 
 A single-page birthday photo gallery with a vintage “Little Explorer” theme, light/dark mode, multilingual UI, and a responsive grid with lightbox viewer.
 
