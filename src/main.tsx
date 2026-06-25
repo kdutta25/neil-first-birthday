@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import { I18nProvider } from "./i18n/I18nContext.tsx";
 import { GlobalStyle } from "./theme/GlobalStyle.ts";
 import { ThemeProvider } from "./theme/ThemeContext.tsx";
-import "react-photo-view/dist/react-photo-view.css";
 import "./index.css";
 import App from "./App.tsx";
 

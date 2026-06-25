@@ -9,6 +9,7 @@ export type TranslationKey =
   | "galleryHeading"
   | "gallerySub"
   | "galleryEmpty"
+  | "galleryLoadingMore"
   | "heroAlt"
   | "openPhoto"
   | "photoAlt"
@@ -47,6 +48,7 @@ export const translations: Record<Language, Translations> = {
     galleryHeading: "Photo gallery",
     gallerySub: "Tap any photo to view it full size.",
     galleryEmpty: "No photos yet.",
+    galleryLoadingMore: "Loading more photos…",
     heroAlt:
       "Neil's first birthday — a travel and adventure themed celebration",
     openPhoto: "Open photo {{n}}",
@@ -83,6 +85,7 @@ export const translations: Record<Language, Translations> = {
     galleryHeading: "फोटो गैलरी",
     gallerySub: "पूर्ण आकार में देखने के लिए किसी भी फोटो पर टैप करें।",
     galleryEmpty: "अभी कोई फोटो नहीं है।",
+    galleryLoadingMore: "और फोटो लोड हो रही हैं…",
     heroAlt: "नील का पहला जन्मदिन — यात्रा और रोमांच थीम वाला जश्न",
     openPhoto: "फोटो {{n}} खोलें",
     photoAlt: "नील का पहला जन्मदिन — फोटो {{n}}",
@@ -118,6 +121,7 @@ export const translations: Record<Language, Translations> = {
     galleryHeading: "ਫੋਟੋ ਗੈਲਰੀ",
     gallerySub: "ਪੂਰੇ ਆਕਾਰ ਵਿੱਚ ਦੇਖਣ ਲਈ ਕਿਸੇ ਵੀ ਫੋਟੋ 'ਤੇ ਟੈਪ ਕਰੋ।",
     galleryEmpty: "ਹਾਲੇ ਕੋਈ ਫੋਟੋ ਨਹੀਂ।",
+    galleryLoadingMore: "ਹੋਰ ਫੋਟੋਆਂ ਲੋਡ ਹੋ ਰਹੀਆਂ ਹਨ…",
     heroAlt: "ਨੀਲ ਦਾ ਪਹਿਲਾ ਜਨਮਦਿਨ — ਯਾਤਰਾ ਅਤੇ ਸਾਹਸੀ ਥੀਮ ਵਾਲਾ ਜਸ਼ਨ",
     openPhoto: "ਫੋਟੋ {{n}} ਖੋਲ੍ਹੋ",
     photoAlt: "ਨੀਲ ਦਾ ਪਹਿਲਾ ਜਨਮਦਿਨ — ਫੋਟੋ {{n}}",
@@ -153,6 +157,7 @@ export const translations: Record<Language, Translations> = {
     galleryHeading: "ফটো গ্যালারি",
     gallerySub: "পুরো আকারে দেখতে যেকোনো ফটোতে ট্যাপ করুন।",
     galleryEmpty: "এখনও কোনো ফটো নেই।",
+    galleryLoadingMore: "আরও ফটো লোড হচ্ছে…",
     heroAlt: "নীলের প্রথম জন্মদিন — ভ্রমণ ও অ্যাডভেঞ্চার থিমের উদযাপন",
     openPhoto: "ফটো {{n}} খুলুন",
     photoAlt: "নীলের প্রথম জন্মদিন — ফটো {{n}}",

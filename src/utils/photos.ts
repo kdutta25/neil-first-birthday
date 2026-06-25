@@ -1,3 +1,5 @@
+export const GALLERY_BATCH_SIZE = 20;
+
 export type PhotoManifest = {
   photos: string[];
 };
