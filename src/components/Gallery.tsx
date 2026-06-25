@@ -24,6 +24,36 @@ const Subheading = styledWithConfig("p")`
   font-size: 15px;
 `;
 
+const ProgressWrap = styledWithConfig("div")`
+  margin-bottom: 18px;
+`;
+
+const ProgressLabel = styledWithConfig("p")`
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 14px;
+`;
+
+const ProgressTrack = styledWithConfig("div")`
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--gallery-progress-track);
+  overflow: hidden;
+`;
+
+const ProgressFill = styledWithConfig("div")<{ $percent: number }>`
+  width: ${({ $percent }) => $percent}%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--accent-dark),
+    var(--accent)
+  );
+  transition: width 0.35s ease;
+`;
+
 const Grid = styledWithConfig("div")`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -115,6 +145,8 @@ export function Gallery({ photos }: GalleryProps) {
 
   const visiblePhotos = photos.slice(0, visibleCount);
   const hasMorePhotos = visibleCount < photos.length;
+  const progressPercent =
+    photos.length > 0 ? Math.round((visibleCount / photos.length) * 100) : 0;
 
   return (
     <Section data-component-id="Gallery" aria-label={t("galleryHeading")}>
@@ -129,6 +161,34 @@ export function Gallery({ photos }: GalleryProps) {
         </EmptyState>
       ) : (
         <>
+          <ProgressWrap data-component-id="GalleryProgress">
+            <ProgressLabel data-component-id="GalleryProgressLabel">
+              {hasMorePhotos
+                ? t("galleryProgress", {
+                    visible: visibleCount,
+                    total: photos.length,
+                  })
+                : t("galleryProgressComplete", { total: photos.length })}
+            </ProgressLabel>
+            <ProgressTrack>
+              <ProgressFill
+                data-component-id="GalleryProgressFill"
+                role="progressbar"
+                aria-valuenow={visibleCount}
+                aria-valuemin={0}
+                aria-valuemax={photos.length}
+                aria-label={
+                  hasMorePhotos
+                    ? t("galleryProgress", {
+                        visible: visibleCount,
+                        total: photos.length,
+                      })
+                    : t("galleryProgressComplete", { total: photos.length })
+                }
+                $percent={progressPercent}
+              />
+            </ProgressTrack>
+          </ProgressWrap>
           <Grid data-component-id="GalleryGrid">
             {visiblePhotos.map((filename, index) => (
               <Item

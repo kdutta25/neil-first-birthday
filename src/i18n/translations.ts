@@ -10,6 +10,8 @@ export type TranslationKey =
   | "gallerySub"
   | "galleryEmpty"
   | "galleryLoadingMore"
+  | "galleryProgress"
+  | "galleryProgressComplete"
   | "heroAlt"
   | "openPhoto"
   | "photoAlt"
@@ -49,6 +51,8 @@ export const translations: Record<Language, Translations> = {
     gallerySub: "Tap any photo to view it full size.",
     galleryEmpty: "No photos yet.",
     galleryLoadingMore: "Loading more photos…",
+    galleryProgress: "{{visible}} of {{total}} photos — scroll down for more",
+    galleryProgressComplete: "All {{total}} photos loaded",
     heroAlt:
       "Neil's first birthday — a travel and adventure themed celebration",
     openPhoto: "Open photo {{n}}",
@@ -86,6 +90,8 @@ export const translations: Record<Language, Translations> = {
     gallerySub: "पूर्ण आकार में देखने के लिए किसी भी फोटो पर टैप करें।",
     galleryEmpty: "अभी कोई फोटो नहीं है।",
     galleryLoadingMore: "और फोटो लोड हो रही हैं…",
+    galleryProgress: "{{visible}} / {{total}} फोटो — और देखने के लिए नीचे स्क्रॉल करें",
+    galleryProgressComplete: "सभी {{total}} फोटो लोड हो गईं",
     heroAlt: "नील का पहला जन्मदिन — यात्रा और रोमांच थीम वाला जश्न",
     openPhoto: "फोटो {{n}} खोलें",
     photoAlt: "नील का पहला जन्मदिन — फोटो {{n}}",
@@ -122,6 +128,8 @@ export const translations: Record<Language, Translations> = {
     gallerySub: "ਪੂਰੇ ਆਕਾਰ ਵਿੱਚ ਦੇਖਣ ਲਈ ਕਿਸੇ ਵੀ ਫੋਟੋ 'ਤੇ ਟੈਪ ਕਰੋ।",
     galleryEmpty: "ਹਾਲੇ ਕੋਈ ਫੋਟੋ ਨਹੀਂ।",
     galleryLoadingMore: "ਹੋਰ ਫੋਟੋਆਂ ਲੋਡ ਹੋ ਰਹੀਆਂ ਹਨ…",
+    galleryProgress: "{{visible}} / {{total}} ਫੋਟੋਆਂ — ਹੋਰ ਵੇਖਣ ਲਈ ਹੇਠਾਂ ਸਕ੍ਰੋਲ ਕਰੋ",
+    galleryProgressComplete: "ਸਾਰੀਆਂ {{total}} ਫੋਟੋਆਂ ਲੋਡ ਹੋ ਗਈਆਂ",
     heroAlt: "ਨੀਲ ਦਾ ਪਹਿਲਾ ਜਨਮਦਿਨ — ਯਾਤਰਾ ਅਤੇ ਸਾਹਸੀ ਥੀਮ ਵਾਲਾ ਜਸ਼ਨ",
     openPhoto: "ਫੋਟੋ {{n}} ਖੋਲ੍ਹੋ",
     photoAlt: "ਨੀਲ ਦਾ ਪਹਿਲਾ ਜਨਮਦਿਨ — ਫੋਟੋ {{n}}",
@@ -158,6 +166,8 @@ export const translations: Record<Language, Translations> = {
     gallerySub: "পুরো আকারে দেখতে যেকোনো ফটোতে ট্যাপ করুন।",
     galleryEmpty: "এখনও কোনো ফটো নেই।",
     galleryLoadingMore: "আরও ফটো লোড হচ্ছে…",
+    galleryProgress: "{{visible}} / {{total}} ফটো — আরও দেখতে নিচে স্ক্রল করুন",
+    galleryProgressComplete: "সব {{total}}টি ফটো লোড হয়েছে",
     heroAlt: "নীলের প্রথম জন্মদিন — ভ্রমণ ও অ্যাডভেঞ্চার থিমের উদযাপন",
     openPhoto: "ফটো {{n}} খুলুন",
     photoAlt: "নীলের প্রথম জন্মদিন — ফটো {{n}}",
