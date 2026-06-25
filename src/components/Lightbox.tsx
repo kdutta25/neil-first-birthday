@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import styledWithConfig from "../utils/styledWithConfig";
 import { useI18n } from "../i18n/I18nContext";
-import { photoUrl } from "../utils/photos";
+import { fullPhotoUrl } from "../utils/photos";
 
 const Overlay = styledWithConfig("div")`
   position: fixed;
@@ -128,7 +128,7 @@ export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
 
       <Photo
         data-component-id="LightboxPhoto"
-        src={photoUrl(current)}
+        src={fullPhotoUrl(current)}
         alt={t("birthdayPhoto", { n: index + 1, total: photos.length })}
         onClick={(event) => event.stopPropagation()}
       />

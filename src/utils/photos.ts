@@ -4,7 +4,9 @@ export type PhotoManifest = {
   photos: string[];
 };
 
-const manifestUrl = `${import.meta.env.BASE_URL}album/manifest.json`;
+const albumBase = `${import.meta.env.BASE_URL}album`;
+
+const manifestUrl = `${albumBase}/manifest.json`;
 
 export async function loadPhotos(): Promise<string[]> {
   try {
@@ -17,6 +19,13 @@ export async function loadPhotos(): Promise<string[]> {
   }
 }
 
-export function photoUrl(filename: string): string {
-  return `${import.meta.env.BASE_URL}album/${filename}`;
+/** Full-size image for the lightbox. */
+export function fullPhotoUrl(filename: string): string {
+  return `${albumBase}/full/${filename}`;
+}
+
+/** WebP thumbnail for the grid (generated at build time). */
+export function thumbPhotoUrl(filename: string): string {
+  const webpName = filename.replace(/\.[^.]+$/i, ".webp");
+  return `${albumBase}/thumbs/${webpName}`;
 }

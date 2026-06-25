@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styledWithConfig from "../utils/styledWithConfig";
 import { useI18n } from "../i18n/I18nContext";
-import { GALLERY_BATCH_SIZE, photoUrl } from "../utils/photos";
+import { GALLERY_BATCH_SIZE, thumbPhotoUrl } from "../utils/photos";
 import { Lightbox } from "./Lightbox";
 
 const Section = styledWithConfig("section")`
@@ -200,7 +200,7 @@ export function Gallery({ photos }: GalleryProps) {
               >
                 <Thumb
                   data-component-id="GalleryThumb"
-                  src={photoUrl(filename)}
+                  src={thumbPhotoUrl(filename)}
                   alt={t("photoAlt", { n: index + 1 })}
                   loading="lazy"
                   decoding="async"
