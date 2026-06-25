@@ -66,12 +66,6 @@ const Control = styledWithConfig("label")`
   }
 `;
 
-const Label = styledWithConfig("span")`
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--muted);
-`;
-
 const Select = styledWithConfig("select")`
   border: 1px solid var(--pref-border);
   background: var(--pref-control-bg);
@@ -132,7 +126,6 @@ export function PreferencesBar() {
 
       <Controls data-component-id="ToolbarControls">
         <Control data-component-id="LanguageControl">
-          <Label data-component-id="LanguageLabel">{t("language")}</Label>
           <Select
             data-component-id="LanguageSelect"
             value={language}

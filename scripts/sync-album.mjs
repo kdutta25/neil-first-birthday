@@ -20,6 +20,12 @@ const imageExt = /\.(jpe?g|png|webp|gif|avif)$/i;
 const THUMB_WIDTH = 500;
 const THUMB_QUALITY = 75;
 const SKIP_DIRS = new Set(["full", "thumbs"]);
+const OG_SOURCE_PHOTO = "Image-3.jpg";
+const OG_WIDTH = 1200;
+const OG_HEIGHT = 630;
+const OG_QUALITY = 85;
+const ogPreviewPath = join(root, "public", "og-preview.jpg");
+const ogCachePath = join(root, ".cache", "og-preview.jpg");
 
 function resolveFullSourceDir() {
   const nestedFull = join(albumSrc, "full");
@@ -90,6 +96,28 @@ async function ensureThumb(sourcePath, photo) {
   return "cached";
 }
 
+async function ensureOgPreview(fullSourceDir) {
+  const ogSource = join(fullSourceDir, OG_SOURCE_PHOTO);
+  if (!existsSync(ogSource)) {
+    console.warn(
+      `Social preview source ${OG_SOURCE_PHOTO} not found — skipping og-preview.jpg.`,
+    );
+    return;
+  }
+
+  if (isSourceNewer(ogSource, ogCachePath)) {
+    mkdirSync(dirname(ogCachePath), { recursive: true });
+    await sharp(ogSource)
+      .rotate()
+      .resize(OG_WIDTH, OG_HEIGHT, { fit: "cover", position: "centre" })
+      .jpeg({ quality: OG_QUALITY, mozjpeg: true })
+      .toFile(ogCachePath);
+  }
+
+  mkdirSync(dirname(ogPreviewPath), { recursive: true });
+  cpSync(ogCachePath, ogPreviewPath);
+}
+
 async function main() {
   rmSync(albumDest, { recursive: true, force: true });
   mkdirSync(fullDest, { recursive: true });
@@ -133,6 +161,8 @@ async function main() {
     JSON.stringify({ photos }, null, 2),
     "utf8",
   );
+
+  await ensureOgPreview(fullSourceDir);
 
   console.log(
     `Synced ${photos.length} photo(s): full → public/album/full/, thumbs → public/album/thumbs/ (${generated} generated, ${cached} from cache).`,

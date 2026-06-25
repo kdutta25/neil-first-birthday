@@ -4,4 +4,5 @@ dist
 .DS_Store
 .vite
 public/album
+public/og-preview.jpg
 .cache
