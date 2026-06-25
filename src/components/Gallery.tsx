@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { PhotoProvider, PhotoView } from "react-photo-view";
 import styledWithConfig from "../utils/styledWithConfig";
 import { useI18n } from "../i18n/I18nContext";
-import { GALLERY_BATCH_SIZE, photoUrl } from "../utils/photos";
-import { Lightbox } from "./Lightbox";
+import { photoUrl } from "../utils/photos";
 
 const Section = styledWithConfig("section")`
   display: flex;
@@ -30,17 +29,13 @@ const Grid = styledWithConfig("div")`
   gap: 12px;
 `;
 
-const Item = styledWithConfig("button")`
-  display: flex;
-  border: none;
-  padding: 0;
-  background: transparent;
+const Item = styledWithConfig("div")`
   border-radius: 14px;
   overflow: hidden;
-  cursor: pointer;
   aspect-ratio: 1;
   box-shadow: 0 10px 24px -14px var(--gallery-shadow);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: zoom-in;
 
   &:hover {
     transform: translateY(-2px);
@@ -65,9 +60,16 @@ const EmptyState = styledWithConfig("p")`
   background: var(--gallery-empty-bg);
 `;
 
-const LoadMoreSentinel = styledWithConfig("div")`
-  width: 100%;
-  height: 1px;
+const ViewerCaption = styledWithConfig("p")`
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  margin: 0;
+  pointer-events: none;
 `;
 
 type GalleryProps = {
@@ -76,38 +78,6 @@ type GalleryProps = {
 
 export function Gallery({ photos }: GalleryProps) {
   const { t } = useI18n();
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [visibleCount, setVisibleCount] = useState(GALLERY_BATCH_SIZE);
-  const loadMoreRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setVisibleCount(GALLERY_BATCH_SIZE);
-  }, [photos]);
-
-  useEffect(() => {
-    const hasMore = visibleCount < photos.length;
-    const sentinel = loadMoreRef.current;
-    if (!hasMore || !sentinel) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setVisibleCount((count) =>
-            Math.min(count + GALLERY_BATCH_SIZE, photos.length)
-          );
-        }
-      },
-      { rootMargin: "240px" }
-    );
-
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, [photos.length, visibleCount]);
-
-  const visiblePhotos = photos.slice(0, visibleCount);
-  const hasMorePhotos = visibleCount < photos.length;
 
   return (
     <Section data-component-id="Gallery" aria-label={t("galleryHeading")}>
@@ -121,43 +91,37 @@ export function Gallery({ photos }: GalleryProps) {
           {t("galleryEmpty")}
         </EmptyState>
       ) : (
-        <>
+        <PhotoProvider
+          loop
+          maskClosable
+          pullClosable
+          overlayRender={({ index, images }) => (
+            <ViewerCaption data-component-id="GalleryViewerCaption">
+              {t("birthdayPhoto", { n: index + 1, total: images.length })}
+            </ViewerCaption>
+          )}
+        >
           <Grid data-component-id="GalleryGrid">
-            {visiblePhotos.map((filename, index) => (
-              <Item
-                key={filename}
-                data-component-id="GalleryItem"
-                type="button"
-                aria-label={t("openPhoto", { n: index + 1 })}
-                onClick={() => setActiveIndex(index)}
-              >
-                <Thumb
-                  data-component-id="GalleryThumb"
-                  src={photoUrl(filename)}
-                  alt={t("photoAlt", { n: index + 1 })}
-                  loading="lazy"
-                />
-              </Item>
-            ))}
-          </Grid>
-          {hasMorePhotos ? (
-            <LoadMoreSentinel
-              ref={loadMoreRef}
-              data-component-id="GalleryLoadMore"
-              aria-hidden="true"
-            />
-          ) : null}
-        </>
-      )}
+            {photos.map((filename, index) => {
+              const src = photoUrl(filename);
 
-      {activeIndex !== null ? (
-        <Lightbox
-          photos={photos}
-          index={activeIndex}
-          onClose={() => setActiveIndex(null)}
-          onChange={setActiveIndex}
-        />
-      ) : null}
+              return (
+                <Item key={filename} data-component-id="GalleryItem">
+                  <PhotoView src={src}>
+                    <Thumb
+                      data-component-id="GalleryThumb"
+                      src={src}
+                      alt={t("photoAlt", { n: index + 1 })}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </PhotoView>
+                </Item>
+              );
+            })}
+          </Grid>
+        </PhotoProvider>
+      )}
     </Section>
   );
 }
