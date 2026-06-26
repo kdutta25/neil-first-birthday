@@ -26,6 +26,7 @@ const Overlay = styledWithConfig("div")`
 
 const PhotoStage = styledWithConfig("div")`
   position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -120,6 +121,7 @@ const CloseButton = styledWithConfig("button")`
   position: absolute;
   top: 18px;
   right: 18px;
+  z-index: 3;
   border: none;
   background: rgba(255, 255, 255, 0.14);
   color: #fff;
@@ -135,6 +137,7 @@ const NavButton = styledWithConfig("button")`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 3;
   border: none;
   background: rgba(255, 255, 255, 0.14);
   color: #fff;
@@ -159,6 +162,7 @@ const Caption = styledWithConfig("p")`
   bottom: 18px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 3;
   color: rgba(255, 255, 255, 0.85);
   font-size: 14px;
   margin: 0;
