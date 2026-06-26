@@ -1,8 +1,10 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
+import { FiDownload } from "react-icons/fi";
 import styledWithConfig, { keyframes } from "../utils/styledWithConfig";
 import { useI18n } from "../i18n/I18nContext";
 import { useLightboxImageCache } from "../hooks/useLightboxImageCache";
 import { useSwipeNavigation } from "../hooks/useSwipeNavigation";
+import { Snackbar } from "./Snackbar";
 
 const spin = keyframes`
   to {
@@ -33,6 +35,13 @@ const PhotoStage = styledWithConfig("div")`
   touch-action: none;
 `;
 
+const PhotoFrame = styledWithConfig("div")`
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+  max-height: 88vh;
+`;
+
 const Photo = styledWithConfig("img")`
   max-width: 100%;
   max-height: 88vh;
@@ -40,6 +49,36 @@ const Photo = styledWithConfig("img")`
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
   user-select: none;
   -webkit-user-drag: none;
+`;
+
+const DownloadButton = styledWithConfig("button")`
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(20, 14, 10, 0.55);
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  transition: background 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    background: rgba(20, 14, 10, 0.72);
+    transform: translateY(-1px);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 const LoadingPanel = styledWithConfig("div")`
@@ -139,6 +178,7 @@ export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
     photos,
     index,
   );
+  const [showDownloadSnackbar, setShowDownloadSnackbar] = useState(false);
 
   const goToPrevious = useCallback(() => {
     if (index > 0) {
@@ -156,6 +196,17 @@ export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
     onSwipeLeft: index < photos.length - 1 ? goToNext : undefined,
     onSwipeRight: index > 0 ? goToPrevious : undefined,
   });
+
+  const handleDownload = useCallback(() => {
+    if (!objectUrl || !current) {
+      return;
+    }
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = current;
+    link.click();
+    setShowDownloadSnackbar(true);
+  }, [objectUrl, current]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -226,13 +277,26 @@ export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
           </LoadingPanel>
         ) : null}
 
-        {objectUrl ? (
-          <Photo
-            data-component-id="LightboxPhoto"
-            src={objectUrl}
-            alt={t("birthdayPhoto", { n: index + 1, total: photos.length })}
-            draggable={false}
-          />
+        {objectUrl && ready ? (
+          <PhotoFrame data-component-id="LightboxPhotoFrame">
+            <DownloadButton
+              data-component-id="LightboxDownload"
+              type="button"
+              aria-label={t("downloadPhoto")}
+              onClick={(event) => {
+                event.stopPropagation();
+                handleDownload();
+              }}
+            >
+              <FiDownload aria-hidden="true" />
+            </DownloadButton>
+            <Photo
+              data-component-id="LightboxPhoto"
+              src={objectUrl}
+              alt={t("birthdayPhoto", { n: index + 1, total: photos.length })}
+              draggable={false}
+            />
+          </PhotoFrame>
         ) : null}
       </PhotoStage>
 
@@ -253,6 +317,13 @@ export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
       <Caption data-component-id="LightboxCaption">
         {t("birthdayPhoto", { n: index + 1, total: photos.length })}
       </Caption>
+
+      {showDownloadSnackbar ? (
+        <Snackbar
+          message={t("imageDownloaded")}
+          onDismiss={() => setShowDownloadSnackbar(false)}
+        />
+      ) : null}
     </Overlay>
   );
 }

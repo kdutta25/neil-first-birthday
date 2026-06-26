@@ -26,6 +26,8 @@ export type TranslationKey =
   | "lightboxLoading"
   | "lightboxLoadingIndeterminate"
   | "lightboxLoadError"
+  | "downloadPhoto"
+  | "imageDownloaded"
   | "close"
   | "previousPhoto"
   | "nextPhoto"
@@ -80,6 +82,8 @@ export const translations: Record<Language, Translations> = {
     lightboxLoading: "Loading {{percent}}%",
     lightboxLoadingIndeterminate: "Loading…",
     lightboxLoadError: "Could not load photo",
+    downloadPhoto: "Download photo",
+    imageDownloaded: "Image downloaded",
     close: "Close",
     previousPhoto: "Previous photo",
     nextPhoto: "Next photo",
@@ -130,6 +134,8 @@ export const translations: Record<Language, Translations> = {
     lightboxLoading: "लोड हो रहा है {{percent}}%",
     lightboxLoadingIndeterminate: "लोड हो रहा है…",
     lightboxLoadError: "फोटो लोड नहीं हो सकी",
+    downloadPhoto: "फोटो डाउनलोड करें",
+    imageDownloaded: "फोटो डाउनलोड हो गई",
     close: "बंद करें",
     previousPhoto: "पिछली फोटो",
     nextPhoto: "अगली फोटो",
@@ -180,6 +186,8 @@ export const translations: Record<Language, Translations> = {
     lightboxLoading: "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ {{percent}}%",
     lightboxLoadingIndeterminate: "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…",
     lightboxLoadError: "ਫੋਟੋ ਲੋਡ ਨਹੀਂ ਹੋ ਸਕੀ",
+    downloadPhoto: "ਫੋਟੋ ਡਾਊਨਲੋਡ ਕਰੋ",
+    imageDownloaded: "ਫੋਟੋ ਡਾਊਨਲੋਡ ਹੋ ਗਈ",
     close: "ਬੰਦ ਕਰੋ",
     previousPhoto: "ਪਿਛਲੀ ਫੋਟੋ",
     nextPhoto: "ਅਗਲੀ ਫੋਟੋ",
@@ -230,6 +238,8 @@ export const translations: Record<Language, Translations> = {
     lightboxLoading: "লোড হচ্ছে {{percent}}%",
     lightboxLoadingIndeterminate: "লোড হচ্ছে…",
     lightboxLoadError: "ফটো লোড করা যায়নি",
+    downloadPhoto: "ফটো ডাউনলোড করুন",
+    imageDownloaded: "ফটো ডাউনলোড হয়েছে",
     close: "বন্ধ করুন",
     previousPhoto: "আগের ফটো",
     nextPhoto: "পরের ফটো",
