@@ -1,7 +1,14 @@
 import { useEffect } from "react";
-import styledWithConfig from "../utils/styledWithConfig";
+import styledWithConfig, { keyframes } from "../utils/styledWithConfig";
 import { useI18n } from "../i18n/I18nContext";
 import { fullPhotoUrl } from "../utils/photos";
+import { useImageLoadProgress } from "../hooks/useImageLoadProgress";
+
+const spin = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`;
 
 const Overlay = styledWithConfig("div")`
   position: fixed;
@@ -14,11 +21,56 @@ const Overlay = styledWithConfig("div")`
   background: var(--lightbox-bg);
 `;
 
+const PhotoStage = styledWithConfig("div")`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 1100px);
+  max-height: 88vh;
+  min-height: min(60vh, 420px);
+`;
+
 const Photo = styledWithConfig("img")`
-  max-width: min(100%, 1100px);
+  max-width: 100%;
   max-height: 88vh;
   border-radius: 12px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+`;
+
+const LoadingPanel = styledWithConfig("div")`
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+`;
+
+const Spinner = styledWithConfig("div")`
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  border: 3px solid rgba(255, 255, 255, 0.18);
+  border-top-color: var(--accent);
+  animation: ${spin} 0.85s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    border-top-color: rgba(255, 255, 255, 0.65);
+  }
+`;
+
+const LoadingText = styledWithConfig("p")`
+  margin: 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 `;
 
 const CloseButton = styledWithConfig("button")`
@@ -79,6 +131,8 @@ type LightboxProps = {
 export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
   const { t } = useI18n();
   const current = photos[index];
+  const imageUrl = current ? fullPhotoUrl(current) : null;
+  const { objectUrl, progress, ready, error } = useImageLoadProgress(imageUrl);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -94,6 +148,11 @@ export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
   }, [index, onChange, onClose, photos.length]);
 
   if (!current) return null;
+
+  const loadingLabel =
+    progress > 0
+      ? t("lightboxLoading", { percent: progress })
+      : t("lightboxLoadingIndeterminate");
 
   return (
     <Overlay
@@ -126,12 +185,32 @@ export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
         </PrevButton>
       ) : null}
 
-      <Photo
-        data-component-id="LightboxPhoto"
-        src={fullPhotoUrl(current)}
-        alt={t("birthdayPhoto", { n: index + 1, total: photos.length })}
+      <PhotoStage
+        data-component-id="LightboxStage"
         onClick={(event) => event.stopPropagation()}
-      />
+      >
+        {!ready ? (
+          <LoadingPanel
+            data-component-id="LightboxLoading"
+            role="status"
+            aria-live="polite"
+            aria-label={loadingLabel}
+          >
+            <Spinner data-component-id="LightboxSpinner" aria-hidden="true" />
+            <LoadingText data-component-id="LightboxLoadingText">
+              {error ? t("lightboxLoadError") : loadingLabel}
+            </LoadingText>
+          </LoadingPanel>
+        ) : null}
+
+        {objectUrl ? (
+          <Photo
+            data-component-id="LightboxPhoto"
+            src={objectUrl}
+            alt={t("birthdayPhoto", { n: index + 1, total: photos.length })}
+          />
+        ) : null}
+      </PhotoStage>
 
       {index < photos.length - 1 ? (
         <NextButton

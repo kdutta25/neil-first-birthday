@@ -23,6 +23,8 @@
   --gallery-empty-bg: rgba(255, 255, 255, 0.45);
   --gallery-empty-border: rgba(124, 106, 84, 0.35);
   --gallery-progress-track: rgba(124, 106, 84, 0.18);
+  --gallery-skeleton-bg: rgba(124, 106, 84, 0.12);
+  --gallery-skeleton-shine: rgba(255, 255, 255, 0.55);
   --pref-bg: rgba(255, 251, 244, 0.9);
   --pref-border: rgba(124, 106, 84, 0.25);
   --pref-control-bg: #fff;
@@ -49,6 +51,8 @@
   --gallery-empty-bg: rgba(255, 255, 255, 0.04);
   --gallery-empty-border: rgba(255, 255, 255, 0.12);
   --gallery-progress-track: rgba(255, 255, 255, 0.12);
+  --gallery-skeleton-bg: rgba(255, 255, 255, 0.08);
+  --gallery-skeleton-shine: rgba(255, 255, 255, 0.16);
   --pref-bg: rgba(32, 26, 36, 0.92);
   --pref-border: rgba(255, 255, 255, 0.1);
   --pref-control-bg: rgba(255, 255, 255, 0.06);

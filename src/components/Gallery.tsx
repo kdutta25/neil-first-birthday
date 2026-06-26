@@ -3,6 +3,7 @@ import styledWithConfig from "../utils/styledWithConfig";
 import { useI18n } from "../i18n/I18nContext";
 import { GALLERY_BATCH_SIZE, thumbPhotoUrl } from "../utils/photos";
 import { Lightbox } from "./Lightbox";
+import { GalleryThumb } from "./GalleryThumb";
 
 const Section = styledWithConfig("section")`
   display: flex;
@@ -76,13 +77,6 @@ const Item = styledWithConfig("button")`
     transform: translateY(-2px);
     box-shadow: 0 16px 30px -12px var(--gallery-shadow);
   }
-`;
-
-const Thumb = styledWithConfig("img")`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
 `;
 
 const EmptyState = styledWithConfig("p")`
@@ -198,12 +192,9 @@ export function Gallery({ photos }: GalleryProps) {
                 aria-label={t("openPhoto", { n: index + 1 })}
                 onClick={() => setActiveIndex(index)}
               >
-                <Thumb
-                  data-component-id="GalleryThumb"
+                <GalleryThumb
                   src={thumbPhotoUrl(filename)}
                   alt={t("photoAlt", { n: index + 1 })}
-                  loading="lazy"
-                  decoding="async"
                 />
               </Item>
             ))}
