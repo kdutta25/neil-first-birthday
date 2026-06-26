@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import styledWithConfig, { keyframes } from "../utils/styledWithConfig";
 import { useI18n } from "../i18n/I18nContext";
-import { fullPhotoUrl } from "../utils/photos";
-import { useImageLoadProgress } from "../hooks/useImageLoadProgress";
+import { useLightboxImageCache } from "../hooks/useLightboxImageCache";
+import { useSwipeNavigation } from "../hooks/useSwipeNavigation";
 
 const spin = keyframes`
   to {
@@ -19,6 +19,7 @@ const Overlay = styledWithConfig("div")`
   justify-content: center;
   padding: 20px;
   background: var(--lightbox-bg);
+  touch-action: pan-y pinch-zoom;
 `;
 
 const PhotoStage = styledWithConfig("div")`
@@ -29,6 +30,7 @@ const PhotoStage = styledWithConfig("div")`
   width: min(100%, 1100px);
   max-height: 88vh;
   min-height: min(60vh, 420px);
+  touch-action: none;
 `;
 
 const Photo = styledWithConfig("img")`
@@ -36,6 +38,8 @@ const Photo = styledWithConfig("img")`
   max-height: 88vh;
   border-radius: 12px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  user-select: none;
+  -webkit-user-drag: none;
 `;
 
 const LoadingPanel = styledWithConfig("div")`
@@ -131,21 +135,38 @@ type LightboxProps = {
 export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
   const { t } = useI18n();
   const current = photos[index];
-  const imageUrl = current ? fullPhotoUrl(current) : null;
-  const { objectUrl, progress, ready, error } = useImageLoadProgress(imageUrl);
+  const { objectUrl, progress, ready, error } = useLightboxImageCache(
+    photos,
+    index,
+  );
+
+  const goToPrevious = useCallback(() => {
+    if (index > 0) {
+      onChange(index - 1);
+    }
+  }, [index, onChange]);
+
+  const goToNext = useCallback(() => {
+    if (index < photos.length - 1) {
+      onChange(index + 1);
+    }
+  }, [index, onChange, photos.length]);
+
+  const { onTouchStart, onTouchEnd } = useSwipeNavigation({
+    onSwipeLeft: index < photos.length - 1 ? goToNext : undefined,
+    onSwipeRight: index > 0 ? goToPrevious : undefined,
+  });
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
-      if (event.key === "ArrowLeft" && index > 0) onChange(index - 1);
-      if (event.key === "ArrowRight" && index < photos.length - 1) {
-        onChange(index + 1);
-      }
+      if (event.key === "ArrowLeft") goToPrevious();
+      if (event.key === "ArrowRight") goToNext();
     };
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [index, onChange, onClose, photos.length]);
+  }, [goToNext, goToPrevious, onClose]);
 
   if (!current) return null;
 
@@ -178,7 +199,7 @@ export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
           aria-label={t("previousPhoto")}
           onClick={(event) => {
             event.stopPropagation();
-            onChange(index - 1);
+            goToPrevious();
           }}
         >
           ‹
@@ -188,6 +209,8 @@ export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
       <PhotoStage
         data-component-id="LightboxStage"
         onClick={(event) => event.stopPropagation()}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
       >
         {!ready ? (
           <LoadingPanel
@@ -208,6 +231,7 @@ export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
             data-component-id="LightboxPhoto"
             src={objectUrl}
             alt={t("birthdayPhoto", { n: index + 1, total: photos.length })}
+            draggable={false}
           />
         ) : null}
       </PhotoStage>
@@ -219,7 +243,7 @@ export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
           aria-label={t("nextPhoto")}
           onClick={(event) => {
             event.stopPropagation();
-            onChange(index + 1);
+            goToNext();
           }}
         >
           ›
