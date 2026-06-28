@@ -52,9 +52,10 @@ const Thumb = styledWithConfig("img")<{ $visible: boolean }>`
 type GalleryThumbProps = {
   src: string;
   alt: string;
+  priority?: boolean;
 };
 
-export function GalleryThumb({ src, alt }: GalleryThumbProps) {
+export function GalleryThumb({ src, alt, priority = false }: GalleryThumbProps) {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -67,8 +68,9 @@ export function GalleryThumb({ src, alt }: GalleryThumbProps) {
         data-component-id="GalleryThumbImage"
         src={src}
         alt={alt}
-        loading="lazy"
+        loading={priority ? "eager" : "lazy"}
         decoding="async"
+        fetchPriority={priority ? "high" : "auto"}
         $visible={loaded}
         onLoad={() => setLoaded(true)}
         onError={() => setFailed(true)}

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styledWithConfig from "../utils/styledWithConfig";
 import { useI18n } from "../i18n/I18nContext";
 import { GALLERY_BATCH_SIZE, thumbPhotoUrl } from "../utils/photos";
+import { useGalleryPrefetch } from "../hooks/useGalleryPrefetch";
 import { Lightbox } from "./Lightbox";
 import { GalleryThumb } from "./GalleryThumb";
 
@@ -110,6 +111,7 @@ export function Gallery({ photos }: GalleryProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [visibleCount, setVisibleCount] = useState(GALLERY_BATCH_SIZE);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  const { warmIndex, thumbEagerCount } = useGalleryPrefetch(photos);
 
   useEffect(() => {
     setVisibleCount(GALLERY_BATCH_SIZE);
@@ -136,6 +138,12 @@ export function Gallery({ photos }: GalleryProps) {
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, [photos.length, visibleCount]);
+
+  useEffect(() => {
+    for (let i = 0; i < visibleCount; i += 1) {
+      warmIndex(i);
+    }
+  }, [visibleCount, warmIndex]);
 
   const visiblePhotos = photos.slice(0, visibleCount);
   const hasMorePhotos = visibleCount < photos.length;
@@ -190,11 +198,14 @@ export function Gallery({ photos }: GalleryProps) {
                 data-component-id="GalleryItem"
                 type="button"
                 aria-label={t("openPhoto", { n: index + 1 })}
+                onMouseEnter={() => warmIndex(index)}
+                onFocus={() => warmIndex(index)}
                 onClick={() => setActiveIndex(index)}
               >
                 <GalleryThumb
                   src={thumbPhotoUrl(filename)}
                   alt={t("photoAlt", { n: index + 1 })}
+                  priority={index < thumbEagerCount}
                 />
               </Item>
             ))}

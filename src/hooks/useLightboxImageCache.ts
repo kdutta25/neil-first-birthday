@@ -1,22 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { fullPhotoUrl } from "../utils/photos";
-import { loadImageBlob } from "../utils/loadImageBlob";
+import {
+  getBlobCacheEntry,
+  initialBlobCacheEntry,
+  preloadFullImage,
+  retainBlobCacheUrls,
+  subscribeBlobCache,
+  type BlobCacheEntry,
+} from "../utils/lightboxBlobCache";
 
-export type ImageLoadState = {
-  objectUrl: string | null;
-  progress: number;
-  ready: boolean;
-  error: boolean;
-};
-
-type CacheEntry = ImageLoadState;
-
-const initialState: ImageLoadState = {
-  objectUrl: null,
-  progress: 0,
-  ready: false,
-  error: false,
-};
+export type ImageLoadState = BlobCacheEntry;
 
 function getAdjacentUrls(photos: string[], index: number): string[] {
   const urls: string[] = [];
@@ -38,127 +31,40 @@ export function useLightboxImageCache(
   photos: string[],
   index: number,
 ): ImageLoadState {
-  const cacheRef = useRef(new Map<string, CacheEntry>());
-  const inflightRef = useRef(new Map<string, () => void>());
   const currentUrlRef = useRef<string | null>(null);
-  const [currentState, setCurrentState] = useState<ImageLoadState>(initialState);
+  const [currentState, setCurrentState] =
+    useState<ImageLoadState>(initialBlobCacheEntry);
 
   useEffect(() => {
     const current = photos[index];
     if (!current) {
       currentUrlRef.current = null;
-      setCurrentState(initialState);
+      setCurrentState(initialBlobCacheEntry);
       return;
     }
 
     const currentUrl = fullPhotoUrl(current);
     currentUrlRef.current = currentUrl;
     const keep = new Set(getAdjacentUrls(photos, index));
+    retainBlobCacheUrls(keep);
 
-    for (const [url, entry] of cacheRef.current.entries()) {
-      if (keep.has(url)) {
-        continue;
+    const cached = getBlobCacheEntry(currentUrl);
+    setCurrentState(cached ?? initialBlobCacheEntry);
+
+    const unsubscribe = subscribeBlobCache(currentUrl, (entry) => {
+      if (currentUrlRef.current === currentUrl) {
+        setCurrentState(entry);
       }
-      inflightRef.current.get(url)?.();
-      inflightRef.current.delete(url);
-      if (entry.objectUrl) {
-        URL.revokeObjectURL(entry.objectUrl);
-      }
-      cacheRef.current.delete(url);
-    }
+    });
 
-    const applyCurrentFromCache = () => {
-      const cached = cacheRef.current.get(currentUrl);
-      if (cached) {
-        setCurrentState(cached);
-        return cached.ready;
-      }
-      setCurrentState(initialState);
-      return false;
-    };
-
-    if (applyCurrentFromCache()) {
-      // Current already cached — still warm prev/next below.
-    }
-
-    const startLoad = (url: string, trackProgress: boolean) => {
-      const cached = cacheRef.current.get(url);
-      if (cached?.ready || inflightRef.current.has(url)) {
-        return;
-      }
-
-      if (!cached) {
-        cacheRef.current.set(url, { ...initialState });
-      }
-
-      const cancel = loadImageBlob(url, {
-        onProgress: trackProgress
-          ? (progress) => {
-              if (currentUrlRef.current !== url) {
-                return;
-              }
-              setCurrentState((state) =>
-                state.ready ? state : { ...state, progress },
-              );
-            }
-          : undefined,
-        onComplete: (objectUrl) => {
-          inflightRef.current.delete(url);
-          const entry: CacheEntry = {
-            objectUrl,
-            progress: 100,
-            ready: true,
-            error: false,
-          };
-          cacheRef.current.set(url, entry);
-          if (currentUrlRef.current === url) {
-            setCurrentState(entry);
-          }
-        },
-        onError: () => {
-          inflightRef.current.delete(url);
-          const entry: CacheEntry = {
-            objectUrl: null,
-            progress: 0,
-            ready: false,
-            error: true,
-          };
-          cacheRef.current.set(url, entry);
-          if (currentUrlRef.current === url) {
-            setCurrentState(entry);
-          }
-        },
-      });
-
-      inflightRef.current.set(url, cancel);
-    };
-
-    for (const url of keep) {
-      startLoad(url, url === currentUrl);
-    }
+    const cancel = preloadFullImage(currentUrl, true);
 
     return () => {
       currentUrlRef.current = null;
+      cancel();
+      unsubscribe();
     };
   }, [photos, index]);
-
-  useEffect(() => {
-    const cache = cacheRef.current;
-    const inflight = inflightRef.current;
-
-    return () => {
-      for (const cancel of inflight.values()) {
-        cancel();
-      }
-      inflight.clear();
-      for (const entry of cache.values()) {
-        if (entry.objectUrl) {
-          URL.revokeObjectURL(entry.objectUrl);
-        }
-      }
-      cache.clear();
-    };
-  }, []);
 
   return currentState;
 }
